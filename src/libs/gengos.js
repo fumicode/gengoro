@@ -3163,6 +3163,7 @@ const gengos = [
 ];
 
 
+//計算しやすいようにあらかじめキャッシュしておく。
 const YEAR2GENGOS = gengos.reduce((memo, gengo)=>{
   memo[gengo.start.year] = gengo;
   return memo;

@@ -370,6 +370,7 @@ class GengoYear{
     return parseInt(this.seireki);
   }
 
+
   getGengo(){
     if(this.gengo){
       return this.gengo;
@@ -404,6 +405,21 @@ class GengoYear{
 
   getGengoYearStr(){
     return this.getGengoStr() + this.getGengoYear();
+  }
+
+
+  didGengoChanged(){
+    return this.getGengoYear() == 1;
+  }
+
+  getChangedGengoYearStr(){
+    if(!this.didGengoChanged){
+      return "";
+    }
+
+    const prevYear= this.constructor(this.getSeireki() - 1);
+
+    return prevYear.getGengoStr() + (prevYear.getGengoYear() + 1) + "年";
   }
 
   getShi(){

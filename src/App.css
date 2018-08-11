@@ -22,61 +22,83 @@
   font-size: large;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-
 .page__header{
 }
 
 .page__body{
+
 }
 
 .page__footer{
   background:blue;
 }
 
-.time-line{
+
+.year-list{
+  width:500px;
+
+}
+
+.year-list__head-table{ /*table*/
   width:100%;
-  background:transparent;
-}
-
-.time-line__row{
-  min-height:100px;
-  position:relative;
-  background:skyblue;
-}
-
-.time-line__col{
-  position:absolute;
-    top:0;
-    bottom:0;
-
-}
-
-.time-line__col.m-year{
-  left:0;
-  width:100px;
-
-  background:#333;
-  color:white;
   
 }
 
-.time-line__col.content{
-  left:100px;
-  right:0;
+.year-list__header{
+}
 
-  overflow:auto;
+.year-list__header-row{
+}
 
-  background:green;
+.year-list__body-container{
+  width:100%;
 
+  display:block;
+  overflow:scroll;
+
+  height:800px; /*可変にしたいなあ */
+}
+
+.year-list__body-table{ /*table*/
+  width:100%;
+  
+  border-collapse:collapse;
+}
+
+
+
+
+.year-list__content{
+  
 
 }
 
-.event-content{
-  
 
+.year-list__candidate-row{
+  color:#aaa;
+
+  border-bottom:1px solid #ccc;
+}
+
+.year-list__candidate-row.m--highlight{
+  color:#000;
+  font-weight:bold;
+  background:yellow;
+  border-color:#000;
+}
+
+.year-list__cell{
+
+}
+
+.year-list__cell.m--seireki{
+  width:33%;
+}
+
+.year-list__cell.m--gengo{
+  width:33%;
+}
+
+.year-list__cell.m--eto{
+  width:33%;
 }

@@ -3,12 +3,21 @@ import logo from './logo.svg';
 import './App.css';
 import {GengoYear} from './libs/GengoYear.js';
 
-class App extends Component {
 
+//Components
+import YearInput from './YearInput.js';
+import FormatIdentifier from './FormatIdentifier.js';
+import RangeInput from './RangeInput.js';
+import YearTable from './YearTable.js';
+import GengoList from './GengoList.js';
+
+class App extends Component {
   constructor(){
     super();
 
     this.state = {
+      yearLine: "",
+
       format: null,
       identifiedYear: null,
       yearCands: null,
@@ -22,32 +31,18 @@ class App extends Component {
       }
     };
 
-    //メインの入力欄
-    this.yearInput =  React.createRef();
-
-    //年の範囲の入力欄
-    this.yearRangeFromInput  =  React.createRef();
-    this.yearRangeToInput  =  React.createRef();
 
 
-    
-    this.onYearLineChanged = (e) => {
-      e.preventDefault();
-      const yearLine = this.yearInput.current.value;
+    //
+
+    this.onYearLineChanged = (yearLine) => {
+      //YearInputコンポートから、入力内容が送られてくる。シンプル。
+      this.setState({yearLine});
+
       this.recogFormatAndSetState(yearLine);
     }
-
-    this.onYearRangeChanged = (e) => {
-      e.preventDefault();
-      const yearFromStr= this.yearRangeFromInput.current.value;
-      const yearToStr  = this.yearRangeToInput  .current.value;
-
-      const yearFrom = parseInt(yearFromStr);
-      const yearTo   = parseInt(yearToStr  );
-
-      console.log(yearFrom);
-      console.log(yearTo);
-
+    
+    this.onYearRangeChanged = (yearFrom, yearTo) => {
       if(yearFrom && yearTo){
         this.setState({
           yearRange:{
@@ -57,13 +52,13 @@ class App extends Component {
         });
 
         setTimeout(()=>{
-          //setStateの直後では変更されないので。
-          this.onYearLineChanged(e);
+          this.recogFormatAndSetState(this.state.yearLine);
+          //範囲を計算し直す必要があるのでもう一度呼ぶ
+          //そのとき、yearRangeの内容を作る必要があるので、
+          //setTimeoutでセットされるのを待つ。
         },1);
-        //範囲を計算し直す必要があるのでもう一度呼ぶ
+
       }
-
-
     }
   }
 
@@ -76,9 +71,7 @@ class App extends Component {
     case "gengo":
 
       console.log("format:西暦 or 元号年。一つが特定できた　");
-
       const newYear = new GengoYear(line);
-
       console.log(line + "\n"+ newYear );
 
       this.setState({ 
@@ -89,10 +82,6 @@ class App extends Component {
         gengoCands:null,
       });
       
-      break;
-
-      //gengoOrSeireki(format.gengoStr);
-
       break;
       
     case "gengo-only":
@@ -147,9 +136,7 @@ class App extends Component {
       console.log("format:干支");
       //estimateByEto(format.etoStr, format.yearRange);
 
-
       const yearCandidate = Array.from(GengoYear.estimateByEto(line,this.state.yearRange.from, this.state.yearRange.to))
-      //console.log(yearCandidate.next().value);
 
       const type = yearCandidate.shift();
 
@@ -206,7 +193,6 @@ class App extends Component {
       return "";
     }
 
-
     const dictionary = {
       gengo: {
         text:"元号年",
@@ -224,7 +210,6 @@ class App extends Component {
         text:"干支",
         result:"いくつかの年に絞れました",
       },
-
     }
 
     let key = "text";
@@ -251,88 +236,31 @@ class App extends Component {
           h1 元号郎 - Gengoro
 
         .page__body
-          .year-inputs
-            form(onSubmit=${this.onYearLineChanged} )
-              input(type="text" name="yearLine" ref=${this.yearInput})
-              |年
-
+          YearInput(onYearLineChanged=${this.onYearLineChanged} )
+          //入力フォーマットを表示する
           if this.state.format
-            .format-identifier
-              p 入力： ${this.getFormatStr()}
-                br
-                |結果： ${this.getFormatStr("result")}
+            FormatIdentifier(format=${this.getFormatStr()} result=${this.getFormatStr("result")})
 
+          //表示する範囲を指定する
           if !this.state.identifiedYear && this.state.yearCands
-            p 年を絞り込もう
-            form(onSubmit=${this.onYearRangeChanged})
-              input(type="text" name="yearRangeFrom" ref=${this.yearRangeFromInput} 
-                defaultValue=${this.state.yearRange.from})
-              |年 〜 
-              input(type="text" name="yearRangeTo" ref=${this.yearRangeToInput}
-                defaultValue=${this.state.yearRange.to})
-              |年
-
-              input(type="submit" value="絞り込み")
-              
+            RangeInput(defaultRange=${this.state.yearRange}
+              onYearRangeChanged=${this.onYearRangeChanged} )
 
           .outputs
             //identifiedYearが存在するか、候補が存在するならば
             if this.state.identifiedYear || this.state.yearCands
-              table.year-list
-                thead
-                  tr.year-list__header
-                    td 西暦
-                    td 元号
-                    td 干支
-
-                if this.state.yearCands
-                  tbody.year-list__content
-                    each yearObj in this.state.yearCands
-                      tr(key=yearObj.seireki).year-list__candidate-row
-                        td= yearObj.getSeireki()+"年"
-                        td= yearObj.getGengoYearStr() + "年"
-                        td= yearObj.getEto()
-                if this.state.identifiedYear
-                  tbody.year-list__content
-                    tr.year-list__candidate-row
-                      td= this.state.identifiedYear.getSeireki()+"年"
-                      td= this.state.identifiedYear.getGengoYearStr() + "年"
-                      td= this.state.identifiedYear.getEto()
+              YearTable( theYear= ${this.state.identifiedYear} yearCands=${this.state.yearCands} range=${{from:this.state.yearRange.from, to:this.state.yearRange.to}})
 
 
-            if this.state.identifiedGengo
-              - const gengo = this.state.identifiedGengo
-              ul
-                li= gengo.start.year + "\t" + gengo.gengo.name
+            //元号が一つか複数ある場合は元号リスト
+            if this.state.identifiedGengo || this.state.gengoCands
+              GengoList(identifiedGengo=this.state.identifiedGengo , gengoCands=this.state.gengoCands)
 
-            if this.state.gengoCands
-              h2 元号候補
-              if this.state.gengoCands.first
-                h3 一文字目に現れる
-                ul
-                  each gengo,index in this.state.gengoCands.first
-                    li(key=gengo.gengo.name)= gengo.start.year + "\t" + gengo.gengo.name
-              if this.state.gengoCands.second
-                h3 二文字目以降に現れる
-                ul
-                  each gengo,index in this.state.gengoCands.second
-                    li(key=gengo.gengo.name)= gengo.start.year + "\t" + gengo.gengo.name
 
           .page__footer
-          //多分中身ないと思うけど
+            //多分中身ないと思うけど
+            //スマホだとこっちに入力欄あった方がいい？
     `;
-    /*
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h1 className="App-title">Welcome to React</h1>
-      </header>
-      <p className="App-intro">
-        To get started, edit <code>src/App.js</code> and save to reload.
-        ok
-      </p>
-    </div>
-    */
   }
 }
 
