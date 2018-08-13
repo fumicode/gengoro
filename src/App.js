@@ -11,6 +11,8 @@ import RangeInput from './RangeInput.js';
 import YearTable from './YearTable.js';
 import GengoList from './GengoList.js';
 
+import GengoSuggestion from './GengoSuggestion.js';
+
 class App extends Component {
   constructor(){
     super();
@@ -28,12 +30,14 @@ class App extends Component {
       yearRange:{
         from:1600,
         to:1800
-      }
+      },
+
+      showAll:true
     };
 
+    this.yearInput = React.createRef();
 
 
-    //
 
     this.onYearLineChanged = (yearLine) => {
       //YearInputコンポートから、入力内容が送られてくる。シンプル。
@@ -60,7 +64,11 @@ class App extends Component {
 
       }
     }
+
+    this.onGengoSelect = this.onGengoSelect.bind(this);
+
   }
+
 
   recogFormatAndSetState(line){
     const format = GengoYear.recogFormat(line);
@@ -228,6 +236,23 @@ class App extends Component {
     return textObj[key];
   }
 
+  onGengoSelect(gengo){
+    this.setState({
+      yearLine:gengo.gengo.name
+    });
+
+    //setStateだけではYearInputのinput valueのonChangeが発火しないようなので
+
+    setTimeout(()=>{
+      this.recogFormatAndSetState(this.state.yearLine);
+
+      if(this.yearInput.current){
+        this.yearInput.current.focus();
+      }
+      
+    },1);
+  }
+
   
   render() {
     return pug`
@@ -236,10 +261,16 @@ class App extends Component {
           h1 元号郎 - Gengoro
 
         .page__body
-          YearInput(onYearLineChanged=${this.onYearLineChanged} )
+          //元号が一つか複数ある場合は元号リスト
+          if this.state.gengoCands
+            GengoSuggestion(gengoCands=this.state.gengoCands onGengoSelect=this.onGengoSelect)
+
+          YearInput(onYearLineChanged=${this.onYearLineChanged}  yearLine=this.state.yearLine ref=this.yearInput)
           //入力フォーマットを表示する
-          if this.state.format
-            FormatIdentifier(format=${this.getFormatStr()} result=${this.getFormatStr("result")})
+
+          //
+            if this.state.format
+              FormatIdentifier(format=${this.getFormatStr()} result=${this.getFormatStr("result")})
 
           //表示する範囲を指定する
           if !this.state.identifiedYear && this.state.yearCands

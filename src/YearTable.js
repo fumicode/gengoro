@@ -9,8 +9,8 @@ import YearRow from './YearRow';
 
 export default class YearTable extends Component {
 
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     
     this.state={
       show:"all"

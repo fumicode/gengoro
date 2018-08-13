@@ -409,17 +409,32 @@ class GengoYear{
 
 
   didGengoChanged(){
-    return this.getGengoYear() == 1;
+    return this.getGengoYear() == 1;//一番最初の西暦一年はのぞきたい
   }
 
   getChangedGengoYearStr(){
-    if(!this.didGengoChanged){
+    if( !this.didGengoChanged ){
+      return "";
+    }
+    const seireki = this.getSeireki();
+
+    if(seireki<= 1){
       return "";
     }
 
-    const prevYear= this.constructor(this.getSeireki() - 1);
+    const prevYear= this.constructor(seireki - 1);
 
-    return prevYear.getGengoStr() + (prevYear.getGengoYear() + 1) + "年";
+    console.log("prevYear がときどきundefinedになってしまうことがあるので表示しておく。再現できてないバグ。");
+    console.log(prevYear);
+    console.log(seireki);
+
+    if(prevYear){
+      return prevYear.getGengoStr() + (prevYear.getGengoYear() + 1) + "年";
+    }
+    else{
+      return "";
+    }
+
   }
 
   getShi(){

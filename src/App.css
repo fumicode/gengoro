@@ -102,3 +102,49 @@
 .year-list__cell.m--eto{
   width:33%;
 }
+
+
+
+
+.gengo-suggestion{
+  display:block;
+  overflow-x:scroll;
+
+}
+
+.gengo-suggestion__list{
+  white-space:nowrap;
+  padding:0;
+  margin:0;
+
+}
+
+
+.gengo-suggestion__item{
+  display:inline-block;
+  margin-right:3px;
+  margin-bottom:10px;
+}
+
+.gengo-suggestion__item.m--sep{
+  width:1px;
+  height:100%;
+  border-right:3px solid #000;
+}
+
+
+.gengo-suggestion__link{
+}
+
+.gengo-suggestion__gengo{
+  padding:5px;
+  border-radius:3px;
+  background:#afa;
+}
+
+.gengo-suggestion__start-year{
+  font-size:8px;
+
+}
+
+
