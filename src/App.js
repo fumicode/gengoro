@@ -100,12 +100,15 @@ class App extends Component {
 
       if(estimation.type == "full-match"){
         console.log(estimation.data); //単一の元号を表示
+        const gengo = estimation.data;
+
+        //const yearCands = Array.from(GengoYear.candYearsOfGengo(gengo));
           
         this.setState({ 
           format,
           identifiedYear: null,
-          yearCands: null, //これは作ってあげてもいいのかもね
-          identifiedGengo: estimation.data,
+          yearCands:null, 
+          identifiedGengo: gengo,
           gengoCands:null,
         });
       }
@@ -285,7 +288,8 @@ class App extends Component {
 
             //元号が一つか複数ある場合は元号リスト
             if this.state.identifiedGengo || this.state.gengoCands
-              GengoList(identifiedGengo=this.state.identifiedGengo , gengoCands=this.state.gengoCands)
+              GengoList(identifiedGengo=this.state.identifiedGengo  gengoCands=this.state.gengoCands, yearLine=this.state.yearLine)
+
 
 
           .page__footer

@@ -3163,6 +3163,22 @@ const gengos = [
 ];
 
 
+//最後の元号には終わりはない
+for(let i = 0; i < gengos.length-1; i ++){
+  const gengo = gengos[i];
+
+  const nextGengo = gengos[i+1];
+
+  gengo.finish = {
+    year: nextGengo.start.year,
+    month: nextGengo.start.month,
+    date: nextGengo.start.date -1  
+    //【適当実装】 1日にはじまるやつが、0日に始まるになっちゃう！厳密じゃ無いので注意！
+  }
+
+}
+
+
 //計算しやすいようにあらかじめキャッシュしておく。
 const YEAR2GENGOS = gengos.reduce((memo, gengo)=>{
   memo[gengo.start.year] = gengo;

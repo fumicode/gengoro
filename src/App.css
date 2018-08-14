@@ -56,6 +56,8 @@
   display:block;
   overflow:scroll;
 
+  -webkit-overflow-scrolling:touch;
+
   height:800px; /*可変にしたいなあ */
 }
 
@@ -110,6 +112,8 @@
   display:block;
   overflow-x:scroll;
 
+  -webkit-overflow-scrolling:touch;
+
 }
 
 .gengo-suggestion__list{
@@ -147,4 +151,58 @@
 
 }
 
+
+.gengo-list__item{
+
+  margin-bottom:1em;
+}
+
+.gengo-table{
+  max-width:800px;
+  border-radius:10px;
+  
+  border:1px solid #ddd;
+  overflow:hidden;
+
+}
+
+.gengo-table__header{
+  background:#333;
+  color:#fff;
+  padding:5px;
+}
+
+.gengo-table__header-content{
+  
+}
+
+.gengo-table__start-year{
+  float:left;
+  width:25%;
+  
+
+}
+
+.gengo-table__name{
+
+  text-align:center;
+  margin-right:25%;
+  font-size:21px;
+
+  font-weight:bold;
+
+}
+
+.gengo-table__body{
+  padding:5px;
+}
+
+.gengo-table__body.m--hidden{
+  display:none;
+
+}
+
+.gengo-table__content{
+
+}
 

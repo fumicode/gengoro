@@ -197,6 +197,14 @@ class GengoYear{
     }
   }
 
+  static * candYearsOfGengo(gengoObj){
+    //!!!!
+    const constructor = this;
+
+    for(let i = gengoObj.start.year; i <= gengoObj.finish.year; i++){
+      yield constructor(gengoObj.start.year);
+    }
+  }
 
   static seireki2shiIndex(seireki){
     //seireki % 4 // 4 だったら甲

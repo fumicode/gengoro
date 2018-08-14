@@ -119,7 +119,7 @@ export default class YearTable extends Component {
                       year=yearObj)
 
 
-            if this.props.theYear
+            else if this.props.theYear
               if this.state.show == "one"
                 tbody.year-list__content
 
@@ -134,6 +134,10 @@ export default class YearTable extends Component {
                     - let highlightClass = isTheYear ? "m--highlight" : ""
                     YearRow(addclass=highlightClass key=yearObj.seireki ref=isTheYear?this.firstCandRow:null year=yearObj)
 
+            else 
+              tbody.year-list__content
+                each yearObj in this.getYearsFromRange(this.props.range.from, this.props.range.to)
+                  YearRow(key=yearObj.seireki year=yearObj)
 
                 
 
