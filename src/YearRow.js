@@ -14,9 +14,9 @@ const YearRow = React.forwardRef((props, ref)=>{
       td.year-list__cell.m--gengo
         if props.year.didGengoChanged()
           div ${props.year.getChangedGengoYearStr()}
+          div ${"(" +props.year.getGengo().start.month+ "月" +props.year.getGengo().start.date+ "日より)"}
         |${props.year.getGengoYearStr() + "年"}
-        if props.year.didGengoChanged()
-          |${"(" +props.year.getGengo().start.month+ "月" +props.year.getGengo().start.date+ "日より)"}
+
       td.year-list__cell.m--eto= props.year.getEto()
 
   `;

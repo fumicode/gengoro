@@ -8,7 +8,7 @@ import {GengoYear} from './libs/GengoYear.js';
 import YearInput from './YearInput.js';
 import FormatIdentifier from './FormatIdentifier.js';
 import RangeInput from './RangeInput.js';
-import YearTable from './YearTable.js';
+import YearSearchResult from './YearSearchResult.js';
 import GengoList from './GengoList.js';
 
 import GengoSuggestion from './GengoSuggestion.js';
@@ -37,7 +37,7 @@ class App extends Component {
 
     this.yearInput = React.createRef();
 
-
+    this.onShowAllChange = this.onShowAllChange.bind(this);
 
     this.onYearLineChanged = (yearLine) => {
       //YearInputコンポートから、入力内容が送られてくる。シンプル。
@@ -256,6 +256,12 @@ class App extends Component {
     },1);
   }
 
+  onShowAllChange(showAll){
+    this.setState({
+      showAll
+    });
+  }
+
   
   render() {
     return pug`
@@ -271,9 +277,9 @@ class App extends Component {
           YearInput(onYearLineChanged=${this.onYearLineChanged}  yearLine=this.state.yearLine ref=this.yearInput)
           //入力フォーマットを表示する
 
-          //
-            if this.state.format
-              FormatIdentifier(format=${this.getFormatStr()} result=${this.getFormatStr("result")})
+          // デバッグ用
+          if this.state.format
+            FormatIdentifier(format=${this.getFormatStr()} result=${this.getFormatStr("result")})
 
           //表示する範囲を指定する
           if !this.state.identifiedYear && this.state.yearCands
@@ -283,12 +289,12 @@ class App extends Component {
           .outputs
             //identifiedYearが存在するか、候補が存在するならば
             if this.state.identifiedYear || this.state.yearCands
-              YearTable( theYear= ${this.state.identifiedYear} yearCands=${this.state.yearCands} range=${{from:this.state.yearRange.from, to:this.state.yearRange.to}})
+              YearSearchResult(theYear= ${this.state.identifiedYear} yearCands=${this.state.yearCands} range=${{from:this.state.yearRange.from, to:this.state.yearRange.to}} show=this.state.showAll?"all":"one" onShowAllChange=this.onShowAllChange)
 
 
             //元号が一つか複数ある場合は元号リスト
             if this.state.identifiedGengo || this.state.gengoCands
-              GengoList(identifiedGengo=this.state.identifiedGengo  gengoCands=this.state.gengoCands, yearLine=this.state.yearLine)
+              GengoList(identifiedGengo=this.state.identifiedGengo  gengoCands=this.state.gengoCands, yearLine=this.state.yearLine onGengoSelect=this.onGengoSelect)
 
 
 

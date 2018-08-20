@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import YearTable from './YearTable.js';
+import {YearTableHeader} from './YearTable.js';
 
 export default class GengoTable extends Component {
   render() {
@@ -17,8 +18,7 @@ export default class GengoTable extends Component {
             .gengo-table__content
               p 改元日: #{this.props.gengo.start.year}年#{this.props.gengo.start.month}月#{this.props.gengo.start.date}日
 
-              h3 年一覧
-
+              YearTableHeader
               YearTable(range=${{from:this.props.gengo.start.year, to:this.props.gengo.finish.year}})
     `;
   }

@@ -38,9 +38,16 @@ class GengoYear{
     if(this.yearPool[parseInt(yearObj.getSeireki())]){
       return;
     }
-
     this.yearPool[parseInt(yearObj.getSeireki())] = yearObj;
+  }
 
+  static getYearsFromRange(from, to){
+    const constructor = this;
+    return Array.from((function*(){
+      for(let i = Math.max(from ,1); i <= to; i ++){
+        yield new constructor(i);
+      }
+    })());
   }
 
   static getCachedYears(){
@@ -202,7 +209,7 @@ class GengoYear{
     const constructor = this;
 
     for(let i = gengoObj.start.year; i <= gengoObj.finish.year; i++){
-      yield constructor(gengoObj.start.year);
+      yield new constructor(gengoObj.start.year);
     }
   }
 
@@ -341,8 +348,9 @@ class GengoYear{
 
   constructor(year){ //year: なんらかの年をあらわすオブジェクト: 2003 / "2018" / "大化3" / "平成3"
     //flyweightパターン
+    const that = this;
 
-    const format = this.constructor.recogFormat(year);
+    const format = that.constructor.recogFormat(year);
 
     let calcedSeireki = 2000;
 
@@ -362,15 +370,17 @@ class GengoYear{
     }
 
     {//キャッシュを調べて、存在するならそちらを返す。
-      const yearObj = this.constructor.getYearFromPool(calcedSeireki);
+      const yearObj = that.constructor.getYearFromPool(calcedSeireki);
       if(yearObj){
         return yearObj;
       }
     }
 
     //キャッシュがないなら、初期化して、キャッシュに登録
-    this.seireki = calcedSeireki;
-    this.constructor.registerYearToPool(this);
+    that.seireki = calcedSeireki;
+    that.constructor.registerYearToPool(that);
+
+    return that;
   }
 
   getSeireki(){
@@ -430,11 +440,7 @@ class GengoYear{
       return "";
     }
 
-    const prevYear= this.constructor(seireki - 1);
-
-    console.log("prevYear がときどきundefinedになってしまうことがあるので表示しておく。再現できてないバグ。");
-    console.log(prevYear);
-    console.log(seireki);
+    const prevYear= new this.constructor(seireki - 1);
 
     if(prevYear){
       return prevYear.getGengoStr() + (prevYear.getGengoYear() + 1) + "年";
