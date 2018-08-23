@@ -13,7 +13,7 @@ export default class RangeInput extends Component {
     this.yearRangeToInput  =  React.createRef();
 
     //変更されたときのイベント
-    this.onYearRangeChanged = (e) => {
+    this.onYearRangeChange = (e) => {
       e.preventDefault();
       const yearFromStr= this.yearRangeFromInput.current.value;
       const yearToStr  = this.yearRangeToInput  .current.value;
@@ -24,8 +24,8 @@ export default class RangeInput extends Component {
       console.log(yearFrom);
       console.log(yearTo);
 
-      if(this.props.onYearRangeChanged && typeof this.props.onYearRangeChanged == "function"){
-        this.props.onYearRangeChanged(yearFrom, yearTo);
+      if(this.props.onYearRangeChange && typeof this.props.onYearRangeChange == "function"){
+        this.props.onYearRangeChange(yearFrom, yearTo);
       }
     }
   }
@@ -33,7 +33,7 @@ export default class RangeInput extends Component {
   render() {
     return pug`
       p 年を絞り込もう
-      form(onSubmit=${this.onYearRangeChanged})
+      form(onSubmit=${this.onYearRangeChange})
         input(type="text" name="yearRangeFrom" ref=${this.yearRangeFromInput} 
           defaultValue=${this.props.defaultRange.from || ""})
         |年 〜 

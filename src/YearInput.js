@@ -7,15 +7,15 @@ export default class YearInput extends Component {
     super(props);
     //メインの入力欄
     this.yearInput = React.createRef();
+    this.onYearLineChange = this.onYearLineChange.bind(this);
+  }
 
-    this.onYearLineChanged = (e)=>{
-      e.preventDefault();
-      const yearLine = this.yearInput.current.value;
+  onYearLineChange(e){
+    e.preventDefault();
+    const yearLine = this.yearInput.current.value;
 
-      if(this.props.onYearLineChanged && typeof this.props.onYearLineChanged == "function"){
-        this.props.onYearLineChanged(yearLine);
-      }
-
+    if(this.props.onYearLineChange && typeof this.props.onYearLineChange == "function"){
+      this.props.onYearLineChange(yearLine);
     }
   }
 
@@ -25,13 +25,13 @@ export default class YearInput extends Component {
     }
   }
 
-
-  render() {
+  render(){
     return pug`
       .year-inputs
-        form(onSubmit=${this.onYearLineChanged} )
-          input(type="text" name="yearLine" onChange=${this.onYearLineChanged} ref=${this.yearInput} value=this.props.yearLine)
+        form(onSubmit=${this.onYearLineChange} )
+          input(type="text" name="yearLine" onChange=${this.onYearLineChange} ref=${this.yearInput} value=this.props.yearLine)
           |年
+          p the value is ${this.props.yearLine}
     `;
   }
 }
