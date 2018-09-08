@@ -198,6 +198,9 @@ class GengoYear{
         }
       }
 
+      console.log("dounatteru");
+      
+
       return {
         type:null
       }

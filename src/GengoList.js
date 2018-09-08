@@ -6,6 +6,7 @@ import GengoTable from './GengoTable.js';
 export default class GengoList extends Component {
   constructor(props){
     super(props);
+
   }
 
   onGengoSelect(gengo){
@@ -16,9 +17,8 @@ export default class GengoList extends Component {
   }
 
   render() {
-
+    //this.なしでかけるようにここでバインドしちゃう
     const onGengoSelect = this.onGengoSelect.bind(this);
-
     return pug`
 
       div

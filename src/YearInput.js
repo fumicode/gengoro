@@ -31,7 +31,6 @@ export default class YearInput extends Component {
         form(onSubmit=${this.onYearLineChange} )
           input(type="text" name="yearLine" onChange=${this.onYearLineChange} ref=${this.yearInput} value=this.props.yearLine)
           |年
-          p the value is ${this.props.yearLine}
     `;
   }
 }

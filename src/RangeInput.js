@@ -18,21 +18,20 @@ export default class RangeInput extends Component {
       const yearFromStr= this.yearRangeFromInput.current.value;
       const yearToStr  = this.yearRangeToInput  .current.value;
 
-      const yearFrom = parseInt(yearFromStr);
-      const yearTo   = parseInt(yearToStr  );
+      const from = parseInt(yearFromStr);
+      const to   = parseInt(yearToStr  );
 
-      console.log(yearFrom);
-      console.log(yearTo);
+      console.log(from);
+      console.log(" ~ " + to);
 
       if(this.props.onYearRangeChange && typeof this.props.onYearRangeChange == "function"){
-        this.props.onYearRangeChange(yearFrom, yearTo);
+        this.props.onYearRangeChange({from, to});
       }
     }
   }
 
   render() {
     return pug`
-      p 年を絞り込もう
       form(onSubmit=${this.onYearRangeChange})
         input(type="text" name="yearRangeFrom" ref=${this.yearRangeFromInput} 
           defaultValue=${this.props.defaultRange.from || ""})

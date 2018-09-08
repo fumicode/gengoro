@@ -11,13 +11,21 @@ import GengoroPage from './GengoroPage.js';
 //////import Action types and creators//////
 import {
   //Action Types
-  CHANGE_YEAR_LINE ,
+  CHANGE_YEAR_LINE  ,
+  RECOG_FORMAT      ,
+  IDENTIFY_THE_YEAR ,
+  IDENTIFY_THE_GENGO,
+  ESTIMATE_BY_ETO   ,
+  SUGGEST_GENGOS    ,
+  NO_FORMAT         ,
 
   //Action Creators
   changeYearLine,
+  changeYearRange,
+  changeShowAll,
+  recogFormat,
 
 } from './actionCreators.js';
-
 
 
 //////Connect to Redux//////
@@ -40,21 +48,36 @@ function mapDispatchToProps(dispatch) { //このdispatchは、storeの中にあ�
   return {
     // propsを通して取得する際に使う名前
     changeYearLine(yearLine) {
+      console.log("Action creator changeYearLins");
       // Storeのdispatchメソッド（引数はAction Creator）
       dispatch(changeYearLine(yearLine));
+
+      //ここでロジック書いてしまっている。
+      //単なるmapなのに、いいのかは甚だ疑問
+      dispatch(recogFormat());
     },
     changeYearRange(range){
-      //!!!!
-      //dispatch(changeYearLine());
+      //ここでロジック書いてしまっている。
+      //単なるmapなのに、いいのかは甚だ疑問
+      dispatch(changeYearRange(range));
+
+      dispatch(recogFormat());
     },
     changeShowAll(showAll){
-      //dispatch(changeYearLine(yearLine));
+      dispatch(changeShowAll(showAll));
     },
-    selectGengo(){
-      //dispatch(changeYearLine(yearLine));
+
+    selectGengo(gengo){
+      dispatch(changeYearLine(gengo.gengo.name));
+
+      //ここでロジック書いてしまっている。
+      //単なるmapなのに、いいのかは甚だ疑問
+      dispatch(recogFormat());
+      
     },
 
     recogFormat(yearLine){
+      console.log("Action creator recogFormat");
       dispatch(recogFormat(yearLine));
     }
 
@@ -70,111 +93,6 @@ class GengoroContainer extends Component {
 
     this.yearInput = React.createRef();
 
-    this.onShowAllChange = this.onShowAllChange.bind(this);
-    this.onGengoSelect = this.onGengoSelect.bind(this);
-    this.onYearLineChanged = this.onYearLineChanged.bind(this);
-    this.onYearRangeChanged = this.onYearRangeChanged.bind(this);
-  }
-
-  onYearLineChanged(yearLine){
-    //YearInputコンポートから、入力内容が送られてくる。シンプル。
-    this.setState({yearLine});
-
-    this.props.recogFormat(yearLine);
-  }
-
-  onYearRangeChanged(yearFrom, yearTo){
-    if(yearFrom && yearTo){
-
-      const yearRange = {
-        from: yearFrom ,
-        to:   yearTo,
-      };
-
-      this.props.changeYearRange(yearRange);
-
-      setTimeout(()=>{
-        this.props.recogFormat(this.props.yearLine);
-        //範囲を計算し直す必要があるのでもう一度呼ぶ
-        //そのとき、yearRangeの内容を作る必要があるので、
-        //setTimeoutでセットされるのを待つ。
-      },1);
-
-    }
-  }
-
-
-
-
-
-
-  getFormatStr(mode){
-    if(!this.state.format){
-      return "";
-    }
-
-    const dictionary = {
-      gengo: {
-        text:"元号年",
-        result:"年が特定できました",
-      },
-      seireki: {
-        text:"西暦年",
-        result:"年が特定できました",
-      },
-      "gengo-only": {
-        text:"元号(候補)のみ",
-        result:"いくつかの元号に絞れました",
-      },
-      eto: {
-        text:"干支",
-        result:"いくつかの年に絞れました",
-      },
-    }
-
-    let key = "text";
-    if(mode == "result"){
-      key = "result";
-    }
-    const textObj = dictionary[this.state.format.type];
-
-    if(!textObj){
-      return ({
-        text:"未対応フォーマット",
-        result:"西暦年、元号、元号年、干支を入力してください。",
-      })[key];
-    }
-
-    return textObj[key];
-  }
-
-  onGengoSelect(gengo){
-    this.setState({
-      yearLine:gengo.gengo.name
-    });
-
-    this.props.recogFormat();
-
-    //setStateだけではYearInputのinput valueのonChangeが発火しないようなので
-
-    
-    /*
-    あとまわし。
-    setTimeout(()=>{
-      this.recogFormatAndSetState(this.state.yearLine);
-
-      if(this.yearInput.current){
-        this.yearInput.current.focus();
-      }
-
-    },1);
-    */
-  }
-
-  onShowAllChange(showAll){
-    this.setState({
-      showAll
-    });
   }
 
 
@@ -203,8 +121,5 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(GengoroContainer);
-
-
-
 
 

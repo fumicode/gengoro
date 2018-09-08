@@ -35,7 +35,7 @@
 
 
 .year-list{
-  width:500px;
+  max-width:500px;
 
 }
 
@@ -58,7 +58,7 @@
 
   -webkit-overflow-scrolling:touch;
 
-  height:800px; /*可変にしたいなあ */
+  height:600px; /*可変にしたいなあ */
 }
 
 .year-list__body-table{ /*table*/

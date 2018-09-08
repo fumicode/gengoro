@@ -13,12 +13,12 @@ export default class GengoSuggestion extends Component {
   onGengoSelect(gengo){
 
     if(this.props.onGengoSelect && typeof this.props.onGengoSelect=== "function" ){
-     this.props.onGengoSelect(gengo); 
+      this.props.onGengoSelect(gengo); 
     }
   }
 
   render() {
-    //なにやら this. がない
+    //this.なしでかけるようにここでバインドしちゃう
     const onGengoSelect = this.onGengoSelect.bind(this);
 
     return pug`
